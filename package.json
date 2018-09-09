@@ -1,0 +1,33 @@
+{
+  "name": "rda-service-registry-client",
+  "version": "1.0.0",
+  "description": "RDA Service Registry Client",
+  "main": "src/ServiceRegistryClient.mjs",
+  "scripts": {
+    "test": "node --experimental-modules --no-warnings ./node_modules/.bin/section ./test/*.mjs --dev --log-level=error+ --log-module=*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infect-org/rda-service-registry-client.git"
+  },
+  "keywords": [
+    "rda"
+  ],
+  "author": "Michael van der Weg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/infect-org/rda-service-registry-client/issues"
+  },
+  "homepage": "https://github.com/infect-org/rda-service-registry-client#readme",
+  "devDependencies": {
+    "@distributed-systems/eslint-config": "^1.0.0",
+    "section-tests": "^2.2.1"
+  },
+  "dependencies": {
+    "@infect/rda-service-manager": "^1.0.0",
+    "ee-machine-id": "^1.0.1",
+    "logd": "^2.2.0",
+    "superagent": "^3.8.3",
+    "uuid": "^3.3.2"
+  }
+}
