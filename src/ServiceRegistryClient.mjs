@@ -22,28 +22,11 @@ export default class ServiceRegistryClient {
     /**
      * set up the client
      *
-     * @param      {Object}  arg1                options
-     * @param      {string}  arg1.identifier     the unique identifier to use when registering as
-     *                                           service
-     * @param      {string}  arg1.protocol       The protocol to user
-     * @param      {string}  arg1.registryHost   The registry host
-     * @param      {string}  arg1.serviceName    the service name to use when registering as service
-     * @param      {number}  arg1.webserverPort  the port to connect to
+     * @param      {string}  registryHost  The registry host
      */
-    constructor({
-        identifier = uuid.v4(),
-        protocol = 'http://',
-        registryHost,
-        serviceName,
-        webserverPort,
-    }) {
+    constructor(registryHost) {
         this.registryHost = registryHost;
-        this.identifier = identifier;
-        this.serviceName = serviceName;
-        this.webserverPort = webserverPort;
-        this.protocol = protocol;
         this.machineId = machineId();
-
         this.baseURL = `${this.registryHost}/rda-service-registry.service-instance`;
 
 
@@ -123,7 +106,7 @@ export default class ServiceRegistryClient {
      * @param      {number}  port    port of the server
      */
     setPort(port) {
-        this.webserverPort = port;
+        this.port = port;
     }
 
 
@@ -132,14 +115,36 @@ export default class ServiceRegistryClient {
     /**
      * register service
      *
+     * @param      {Object}   arg1              options
+     * @param      {string}   arg1.identifier   the unique identifier for this service instance
+     * @param      {number}   arg1.port         the port this service is listening on
+     * @param      {string}   arg1.protocol     the protocol this service provides services through
+     * @param      {string}   arg1.serviceName  the name of this service
      * @return     {Promise}  undefined
      */
-    async register() {
+    async register({
+        identifier = uuid.v4(),
+        port,
+        protocol = 'http://',
+        serviceName,
+    }) {
         if (this.isDeregistered) {
             throw new Error('Cannot register service, it was de-registered and cannot be registered anymore!');
-        } else if (!this.webserverPort) {
-            throw new Error('Cannot register service, the web server port (webserverPort) was not passed to the constructor!');
         }
+
+        // eslint-disable-next-line no-param-reassign
+        port = port || this.port;
+
+        if (!port) {
+            throw new Error('Cannot register service: the option.port parameter was not passed to the register method!');
+        } else if (!serviceName) {
+            throw new Error('Cannot register service: the option.serviceName parameter was not passed to the register method!');
+        }
+
+
+        // store the identifier, it is used for de-registering later on
+        this.identifier = identifier;
+
 
         // get network interfaces, use the first ipv4
         // and the first ipv6 interfaces that are not
@@ -154,12 +159,12 @@ export default class ServiceRegistryClient {
         const response = await superagent.post(this.baseURL)
             .ok(res => res.status === 201)
             .send({
-                identifier: this.identifier,
-                serviceType: this.serviceName,
                 availableMemory: stats.total_available_size,
+                identifier,
+                ipv4address: addresses.ipv4 ? `${protocol}${addresses.ipv4}:${port}` : null,
+                ipv6address: addresses.ipv6 ? `${protocol}${addresses.ipv6}:${port}` : null,
                 machineId: this.machineId,
-                ipv4address: addresses.ipv4 ? `${this.protocol}${addresses.ipv4}:${this.webserverPort}` : null,
-                ipv6address: addresses.ipv6 ? `${this.protocol}${addresses.ipv6}:${this.webserverPort}` : null,
+                serviceType: serviceName,
             });
 
 

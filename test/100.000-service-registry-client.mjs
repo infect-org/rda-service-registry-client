@@ -25,15 +25,14 @@ section('RDA Service Registry Client', (section) => {
 
     section.test('Register and deregister', async() => {
         section.notice('starting the service');
-        const client = new ServiceRegistryClient({
-            registryHost: host,
-            serviceName: 'client-test',
-            webserverPort: 8000,
-        });
+        const client = new ServiceRegistryClient(host);
 
 
         section.notice('registering');
-        await client.register();
+        await client.register({
+            serviceName: 'client-test',
+            port: 8000,
+        });
 
 
         assert(client.ttl);
@@ -48,20 +47,19 @@ section('RDA Service Registry Client', (section) => {
 
     section.test('Resolve', async() => {
         section.notice('starting the service');
-        const client = new ServiceRegistryClient({
-            registryHost: host,
-            serviceName: 'client-test',
-            webserverPort: 8000,
-        });
+        const client = new ServiceRegistryClient(host);
 
 
         section.notice('registering');
-        await client.register();
+        await client.register({
+            serviceName: 'client-test',
+            port: 8000,
+        });
 
 
         section.notice('resolving');
         const address = await client.resolve('client-test');
-
+        
         assert(address);
 
 
