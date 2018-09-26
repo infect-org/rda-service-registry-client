@@ -1,5 +1,5 @@
 import logd from 'logd';
-import superagent from 'superagent';
+import HTTP2Client from '@distributed-systems/http2-client';
 import uuid from 'uuid';
 import os from 'os';
 import v8 from 'v8';
@@ -28,6 +28,7 @@ export default class ServiceRegistryClient {
         this.registryHost = registryHost;
         this.machineId = machineId();
         this.baseURL = `${this.registryHost}/rda-service-registry.service-instance`;
+        this.httpClient = new HTTP2Client();
 
 
         // if set top true we've been de-registered
@@ -52,8 +53,8 @@ export default class ServiceRegistryClient {
 
 
         // call the registry and let them know that we're alive
-        superagent.patch(`${this.baseURL}/${this.identifier}`)
-            .ok(res => res.status === 200)
+        this.httpClient.patch(`${this.baseURL}/${this.identifier}`)
+            .expect(200)
             .send()
             .catch((err) => {
                 log.error(err);
@@ -91,8 +92,8 @@ export default class ServiceRegistryClient {
     async deregister() {
         this.isDeregistered = true;
         clearTimeout(this.timeout);
-        await superagent.delete(`${this.baseURL}/${this.identifier}`)
-            .ok(res => res.status === 200)
+        await this.httpClient.delete(`${this.baseURL}/${this.identifier}`)
+            .expect(200)
             .send();
     }
 
@@ -156,8 +157,8 @@ export default class ServiceRegistryClient {
         const stats = v8.getHeapStatistics();
 
 
-        const response = await superagent.post(this.baseURL)
-            .ok(res => res.status === 201)
+        const response = await this.httpClient.post(this.baseURL)
+            .expect(201)
             .send({
                 availableMemory: stats.total_available_size,
                 identifier,
@@ -167,10 +168,11 @@ export default class ServiceRegistryClient {
                 serviceType: serviceName,
             });
 
+        const data = await response.getData();
 
         // the registry tells us how often we need to
         // update our records (convert from sec to msec)
-        this.ttl = response.body.ttl * 1000;
+        this.ttl = data.ttl * 1000;
 
 
         // start polling the registry, it else will assume
@@ -223,18 +225,16 @@ export default class ServiceRegistryClient {
         family = 'ipv4',
         timeout = 2000,
     } = {}) {
-        const response = await superagent.get(this.baseURL)
-            .timeout({
-                deadline: timeout,
-            })
-            .ok(res => res.status === 200)
+        const response = await this.httpClient.get(this.baseURL)
+            .timeout(timeout)
+            .expect(200)
             .query({
                 serviceType: serviceName,
             })
             .send();
 
 
-        const addresses = response.body;
+        const addresses = await response.getData();
 
         if (addresses.length) {
 

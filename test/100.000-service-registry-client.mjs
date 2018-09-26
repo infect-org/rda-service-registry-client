@@ -59,7 +59,7 @@ section('RDA Service Registry Client', (section) => {
 
         section.notice('resolving');
         const address = await client.resolve('client-test');
-        
+
         assert(address);
 
 
