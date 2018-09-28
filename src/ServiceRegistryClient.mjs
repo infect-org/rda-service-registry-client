@@ -4,6 +4,7 @@ import uuid from 'uuid';
 import os from 'os';
 import v8 from 'v8';
 import machineId from 'ee-machine-id';
+import Delay from '@distributed-systems/delay';
 
 
 
@@ -39,6 +40,20 @@ export default class ServiceRegistryClient {
 
 
 
+    /**
+     * shut down the client
+     *
+     * @return     {Promise}  undefined
+     */
+    async end() {
+        if (this.delay) {
+            this.delay.cancel();
+        }
+    }
+
+
+
+
 
     /**
      * call the registry in double the required frequency
@@ -46,7 +61,9 @@ export default class ServiceRegistryClient {
      * @return     {Promise}  undefined
      */
     async pollRegistry() {
-        await this.wait(this.ttl / 2);
+        this.delay = new Delay();
+        await this.delay.wait(this.ttl / 2);
+
 
         // don't update after the service was de-registered
         if (this.isDeregistered) return;
@@ -66,20 +83,6 @@ export default class ServiceRegistryClient {
     }
 
 
-
-
-
-    /**
-     * pause for some milliseconds
-     *
-     * @param      {number}   msec    number of milliseconds to pause
-     * @return     {Promise}  undefined
-     */
-    wait(msec) {
-        return new Promise((resolve) => {
-            this.timeout = setTimeout(resolve, msec);
-        });
-    }
 
 
 

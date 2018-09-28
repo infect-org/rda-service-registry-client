@@ -40,6 +40,7 @@ section('RDA Service Registry Client', (section) => {
 
         section.notice('de-registering');
         await client.deregister();
+        await client.end();
     });
 
 
@@ -65,6 +66,7 @@ section('RDA Service Registry Client', (section) => {
 
         section.notice('de-registering');
         await client.deregister();
+        await client.end();
     });
 
 
