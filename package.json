@@ -20,15 +20,15 @@
   },
   "homepage": "https://github.com/infect-org/rda-service-registry-client#readme",
   "devDependencies": {
-    "@distributed-systems/eslint-config": "^1.0.1",
-    "section-tests": "^2.2.3"
+    "@distributed-systems/eslint-config": "^1.0.1"
   },
   "dependencies": {
     "@distributed-systems/delay": "^1.0.1",
-    "@distributed-systems/http2-client": "^1.2.2",
+    "@distributed-systems/http2-client": "^2.0.0",
     "@infect/rda-service-manager": "^1.0.2",
     "ee-machine-id": "^1.0.1",
     "logd": "^2.2.0",
+    "section-tests": "^2.2.4",
     "uuid": "^3.3.2"
   }
 }
