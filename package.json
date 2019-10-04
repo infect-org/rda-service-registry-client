@@ -1,10 +1,10 @@
 {
   "name": "@infect/rda-service-registry-client",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "RDA Service Registry Client",
-  "main": "src/ServiceRegistryClient.mjs",
+  "main": "src/ServiceRegistryClient.js",
   "scripts": {
-    "test": "node --experimental-modules --no-warnings ./node_modules/.bin/section ./test/*.mjs --dev --log-level=error+ --log-module=*"
+    "test": "node --experimental-modules --no-warnings ./node_modules/.bin/section ./test/*.js --dev.testing --log-level=error+ --log-module=*"
   },
   "repository": {
     "type": "git",
@@ -13,22 +13,24 @@
   "keywords": [
     "rda"
   ],
-  "author": "Michael van der Weg",
+  "author": "Lina van der Weg",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/infect-org/rda-service-registry-client/issues"
   },
   "homepage": "https://github.com/infect-org/rda-service-registry-client#readme",
   "devDependencies": {
-    "@distributed-systems/eslint-config": "^1.0.1"
+    "@distributed-systems/eslint-config": "^1.0.3",
+    "@infect/rda-service-manager": "^2.0.2",
+    "@infect/rda-service-registry": "^2.0.3"
   },
   "dependencies": {
     "@distributed-systems/delay": "^1.0.1",
     "@distributed-systems/http2-client": "^2.0.0",
-    "@infect/rda-service-manager": "^1.0.2",
-    "ee-machine-id": "^1.0.1",
-    "logd": "^2.2.0",
+    "ee-machine-id": "^1.0.3",
+    "logd": "^2.3.1",
     "section-tests": "^2.2.4",
-    "uuid": "^3.3.2"
-  }
+    "uuid": "^3.3.3"
+  },
+  "type": "module"
 }

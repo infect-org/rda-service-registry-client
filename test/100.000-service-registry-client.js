@@ -1,7 +1,7 @@
 import section from 'section-tests';
 import assert from 'assert';
 import ServiceManager from '@infect/rda-service-manager';
-import ServiceRegistryClient from '../src/ServiceRegistryClient.mjs';
+import ServiceRegistryClient from '../src/ServiceRegistryClient.js';
 
 
 
@@ -14,10 +14,10 @@ section('RDA Service Registry Client', (section) => {
 
     section.setup(async() => {
         sm = new ServiceManager({
-            args: '--dev --log-level=error+ --log-module=*'.split(' '),
+            args: '--dev.testing --log-level=error+ --log-module=*'.split(' '),
         });
 
-        await sm.startServices('rda-service-registry');
+        await sm.startServices('@infect/rda-service-registry');
     });
 
 
