@@ -21,8 +21,8 @@
   "homepage": "https://github.com/infect-org/rda-service-registry-client#readme",
   "devDependencies": {
     "@distributed-systems/eslint-config": "^1.0.3",
-    "@infect/rda-service-manager": "^2.0.2",
-    "@infect/rda-service-registry": "^2.0.3"
+    "@infect/rda-service-manager": "^2.0.4",
+    "@infect/rda-service-registry": "^2.0.8"
   },
   "dependencies": {
     "@distributed-systems/delay": "^1.0.1",
@@ -30,7 +30,7 @@
     "ee-machine-id": "^1.0.3",
     "logd": "^2.3.1",
     "section-tests": "^2.2.4",
-    "uuid": "^3.3.3"
+    "uuid": "^3.4.0"
   },
   "type": "module"
 }

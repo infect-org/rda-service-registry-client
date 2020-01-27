@@ -226,7 +226,7 @@ export default class ServiceRegistryClient {
      */
     async resolve(serviceName, {
         family = 'ipv4',
-        timeout = 2000,
+        timeout = 10000,
     } = {}) {
         const response = await this.httpClient.get(this.baseURL)
             .timeout(timeout)
