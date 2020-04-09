@@ -54,7 +54,6 @@ export default class ServiceRegistryClient {
 
 
 
-
     /**
      * call the registry in double the required frequency
      *
@@ -70,18 +69,19 @@ export default class ServiceRegistryClient {
 
 
         // call the registry and let them know that we're alive
-        this.httpClient.patch(`${this.baseURL}/${this.identifier}`)
+        await this.httpClient.patch(`${this.baseURL}/${this.identifier}`)
             .expect(200)
-            .send()
-            .catch((err) => {
+            .send();
+
+
+        // run again. important: without the setImmediate call the process may 
+        // leak memory
+        setImmediate(function t() => {
+            this.pollRegistry().catch((err) => {
                 log.error(err);
             });
-
-
-        // run again
-        this.pollRegistry();
+        });
     }
-
 
 
 
