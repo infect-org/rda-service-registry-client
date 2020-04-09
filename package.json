@@ -1,6 +1,6 @@
 {
   "name": "@infect/rda-service-registry-client",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "RDA Service Registry Client",
   "main": "src/ServiceRegistryClient.js",
   "scripts": {
