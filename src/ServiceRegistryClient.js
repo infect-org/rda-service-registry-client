@@ -76,7 +76,7 @@ export default class ServiceRegistryClient {
 
         // run again. important: without the setImmediate call the process may 
         // leak memory
-        setImmediate(function t() => {
+        setImmediate(() => {
             this.pollRegistry().catch((err) => {
                 log.error(err);
             });
