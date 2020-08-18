@@ -30,6 +30,7 @@ export default class ServiceRegistryClient {
         this.machineId = machineId();
         this.baseURL = `${this.registryHost}/rda-service-registry.service-instance`;
         this.httpClient = new HTTP2Client();
+        this.delay = new Delay();
 
 
         // if set top true we've been de-registered
@@ -61,7 +62,6 @@ export default class ServiceRegistryClient {
      * @return     {Promise}  undefined
      */
     async pollRegistry() {
-        this.delay = new Delay();
         await this.delay.wait(this.ttl / 2);
 
 
